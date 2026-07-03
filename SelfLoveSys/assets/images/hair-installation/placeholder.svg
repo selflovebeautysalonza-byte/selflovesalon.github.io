@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <rect width="100%" height="100%" fill="#fff6f0"/>
+  <path d="M200 450 C 300 350, 500 350, 600 450 L600 480 L200 480 Z" fill="#d4a574"/>
+  <circle cx="400" cy="220" r="90" fill="#e8d5c4"/>
+  <text x="50%" y="520" font-family="Arial, Helvetica, sans-serif" font-size="28" fill="#6b6b6b" text-anchor="middle">Hair Installation Placeholder</text>
+</svg>
