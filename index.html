@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Self-Love Beauty Salon - Hair, Nails & Lashes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Cinzel:wght@400;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
+    <style>
+        /* ===== COLOR TOKENS ===== */
+        :root {
+            --black:        #080808;
+            --black-rich:   #0d0a06;
+            --gold-light:   #f7e08a;
+            --gold-mid:     #d4a820;
+            --gold-deep:    #b8891a;
+            --gold-border:  rgba(212,168,32,0.55);
+            --gold-glow:    rgba(212,168,32,0.18);
+            --pink:         #e85ca0;
+            --pink-light:   #f4a8d0;
+            --cream:        #f5e6c8;
+            --cream-muted:  #c9b98a;
+            --white:        #ffffff;
+            --text-dim:     rgba(245,230,200,0.70);
+        }
+
+        /* ===== RESET ===== */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+
+        /* ===== SPARKLE BACKGROUND - BEAUTIFUL NUDE & BLACK FADE ===== */
+        body {
+            background: linear-gradient(135deg, #0d0a06 0%, #1a1410 25%, #2d2620 50%, #a89080 75%, #d4b5a0 100%);
+            background-attachment: fixed;
+            background-image:
+                linear-gradient(135deg, #0d0a06 0%, #1a1410 25%, #2d2620 50%, #a89080 75%, #d4b5a0 100%),
+                radial-gradient(ellipse 80% 60% at 50% -10%, rgba(212,168,32,0.22) 0%, transparent 65%),
+                radial-gradient(ellipse 60% 40% at 80% 100%, rgba(212,168,32,0.12) 0%, transparent 60%),
+                radial-gradient(ellipse 50% 30% at 20% 80%,  rgba(232,92,160,0.08) 0%, transparent 55%);
+            color: var(--cream);
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-size: 17px;
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* Sparkle canvas overlay */
+        #sparkle-canvas {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Everything above canvas */
+        body > *:not(#sparkle-canvas) { position: relative; z-index: 1; }
+
+        /* ===== GOLD RIBBON UTILITY ===== */
+        .gold-ribbon {
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(90deg,
+                transparent 0%,
+                var(--gold-deep) 15%,
+                var(--gold-light) 35%,
+                var(--gold-mid) 50%,
+                var(--gold-light) 65%,
+                var(--gold-deep) 85%,
+                transparent 100%);
+        }
+
+        /* ===== NAVIGATION ===== */
+        .navbar {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 1000;
+            background: rgba(8,8,8,0.92);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--gold-border);
+        }
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 72px;
+        }
+        .logo h1 {
+            font-family: 'Great Vibes', cursive;
+            font-size: 2.2rem;
+            font-weight: 400;
+            background: linear-gradient(135deg, var(--gold-deep) 0%, var(--gold-light) 50%, var(--gold-mid) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 0.02em;
+            text-shadow: none;
+        }
+        .header-profile {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 12px;
+            border: 2px solid var(--gold-border);
+            vertical-align: middle;
+        }
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        .nav-link {
+            font-family: 'Cinzel', serif;
+            font-size: 0.72rem;
+            font-weight: 400;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--cream-muted);
+            text-decoration: none;
+            transition: color 0.25s;
+        }
+        .nav-link:hover { color: var(--gold-light); }
+
+        /* ===== HERO ===== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 120px 2rem 80px;
+            position: relative;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 70% 50% at 50% 50%, rgba(212,168,32,0.10) 0%, transparent 70%);
+        }
+        .hero-ornament {
+            font-family: 'Great Vibes', cursive;
+            font-size: 1.1rem;
+            color: var(--gold-mid);
+            letter-spacing: 0.1em;
+            display: block;
+            margin-bottom: 0.5rem;
+            animation: fadeInDown 0.8s ease both;
+        }
+        .hero-title-top {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(2.8rem, 7vw, 5.5rem);
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            background: linear-gradient(160deg, var(--gold-deep) 0%, var(--gold-light) 45%, var(--gold-mid) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.05;
+            animation: fadeInDown 0.9s 0.1s ease both;
+        }
+        .hero-title-script {
+            font-family: 'Great Vibes', cursive;
+            font-size: clamp(2.4rem, 6vw, 4.8rem);
+            font-weight: 400;
+            color: var(--pink);
+            display: block;
+            line-height: 1.3;
+            animation: fadeInDown 1s 0.2s ease both;
+        }
+        .hero-tagline {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 1.2rem;
+            color: var(--cream);
+            letter-spacing: 0.06em;
+            margin: 1.2rem 0 2.4rem;
+            animation: fadeInDown 1s 0.3s ease both;
+        }
+        .divider-ornament {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.2rem 0;
+            animation: fadeIn 1s 0.35s ease both;
+        }
+        .divider-ornament::before,
+        .divider-ornament::after {
+            content: '';
+            flex: 1;
+            max-width: 140px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold-mid));
+        }
+        .divider-ornament::after {
+            background: linear-gradient(90deg, var(--gold-mid), transparent);
+        }
+        .divider-ornament span {
+            color: var(--gold-mid);
+            font-size: 1.3rem;
+        }
+        .cta-button {
+            display: inline-block;
+            font-family: 'Cinzel', serif;
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--black);
+            background: linear-gradient(135deg, var(--gold-deep) 0%, var(--gold-light) 50%, var(--gold-mid) 100%);
+            border: none;
+            padding: 1rem 2.8rem;
+            cursor: pointer;
+            clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
+            transition: transform 0.2s, box-shadow 0.2s;
+            animation: fadeInUp 1s 0.4s ease both;
+        }
+        .cta-button:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 8px 32px rgba(212,168,32,0.45);
+        }
+
+        /* ===== SECTION BASE ===== */
+        section { padding: 100px 2rem; }
+        .container { max-width: 1160px; margin: 0 auto; }
+        .section-header { text-align: center; margin-bottom: 3.5rem; }
+        .section-eyebrow {
+            font-family: 'Great Vibes', cursive;
+            font-size: 1.5rem;
+            color: var(--pink);
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+        .section-title {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(1.8rem, 4vw, 2.6rem);
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, var(--gold-deep), var(--gold-light), var(--gold-mid));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* ===== SERVICES ===== */
+        .services { background: rgba(0,0,0,0.35); }
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+        }
+        .service-card {
+            background: rgba(13,10,6,0.85);
+            border: 1px solid var(--gold-border);
+            border-top: 2px solid var(--gold-mid);
+            padding: 2rem 1.5rem 1.8rem;
+            position: relative;
+            transition: transform 0.25s, box-shadow 0.25s;
+            overflow: hidden;
+        }
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 100%;
+            background: linear-gradient(160deg, rgba(212,168,32,0.06) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        .service-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(212,168,32,0.20);
+        }
+        .service-image {
+            width: 100%;
+            height: 250px;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid var(--gold-border);
+        }
+        .service-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .service-card h3 {
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--gold-light);
+            margin-bottom: 0.6rem;
+        }
+        .service-card > p {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+        .service-card ul { list-style: none; }
+        .service-card ul li {
+            font-size: 0.92rem;
+            color: var(--cream);
+            padding: 0.45rem 0;
+            border-bottom: 1px solid rgba(212,168,32,0.15);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .service-card ul li:last-child { border-bottom: none; }
+        .service-card ul li strong {
+            color: var(--pink);
+            font-family: 'Cinzel', serif;
+            font-size: 1.05rem;
+            font-weight: 600;
+        }
+        .service-card ul li.single-price strong {
+            color: var(--gold-light);
+            font-size: 1.4rem;
+        }
+
+        /* ===== BOOKING ===== */
+        .booking {
+            background:
+                radial-gradient(ellipse 60% 50% at 50% 0%, rgba(212,168,32,0.10) 0%, transparent 70%),
+                rgba(0,0,0,0.2);
+        }
+        .booking-form-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2.5rem;
+            align-items: start;
+        }
+        @media(max-width:780px){
+            .booking-form-container { grid-template-columns: 1fr; }
+            .nav-menu { display: none; }
+        }
+        .booking-form {
+            background: rgba(13,10,6,0.90);
+            border: 1px solid var(--gold-border);
+            padding: 2.4rem 2rem;
+        }
+        .form-group { margin-bottom: 1.3rem; }
+        .form-group label {
+            display: block;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            font-weight: 400;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--gold-mid);
+            margin-bottom: 0.45rem;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            background: rgba(0,0,0,0.55);
+            border: 1px solid var(--gold-border);
+            color: var(--cream);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1rem;
+            padding: 0.7rem 0.9rem;
+            outline: none;
+            transition: border-color 0.2s;
+            -webkit-appearance: none;
+        }
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--gold-mid);
+            box-shadow: 0 0 0 3px rgba(212,168,32,0.12);
+        }
+        .form-group select option { background: #0d0a06; }
+        .form-group textarea { min-height: 90px; resize: vertical; }
+        .submit-button {
+            width: 100%;
+            font-family: 'Cinzel', serif;
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--black);
+            background: linear-gradient(135deg, var(--gold-deep) 0%, var(--gold-light) 50%, var(--gold-mid) 100%);
+            border: none;
+            padding: 1.1rem 2rem;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.15s;
+            margin-top: 0.5rem;
+        }
+        .submit-button:hover { opacity: 0.88; transform: translateY(-1px); }
+
+        /* Available Slots */
+        .available-slots {
+            background: rgba(13,10,6,0.90);
+            border: 1px solid var(--gold-border);
+            padding: 2rem 1.8rem;
+        }
+        .available-slots h3 {
+            font-family: 'Cinzel', serif;
+            font-size: 0.8rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--gold-mid);
+            margin-bottom: 1.2rem;
+        }
+        .slots-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.6rem;
+        }
+        .slot-pill {
+            background: rgba(212,168,32,0.08);
+            border: 1px solid var(--gold-border);
+            color: var(--cream);
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            letter-spacing: 0.1em;
+            padding: 0.5rem 0.3rem;
+            text-align: center;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+        .slot-pill:hover, .slot-pill.selected {
+            background: var(--gold-mid);
+            color: var(--black);
+        }
+        .slot-pill.booked {
+            opacity: 0.3;
+            cursor: not-allowed;
+            pointer-events: none;
+            text-decoration: line-through;
+        }
+
+        /* ===== TESTIMONIALS ===== */
+        .testimonials { background: rgba(0,0,0,0.4); }
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        .testimonial-card {
+            background: rgba(13,10,6,0.85);
+            border: 1px solid var(--gold-border);
+            border-bottom: 2px solid var(--gold-mid);
+            padding: 1.8rem;
+            position: relative;
+        }
+        .testimonial-card::before {
+            content: '\201C';
+            position: absolute;
+            top: 0.8rem; left: 1.2rem;
+            font-family: 'Great Vibes', cursive;
+            font-size: 4rem;
+            color: rgba(212,168,32,0.20);
+            line-height: 1;
+        }
+        .testimonial-text {
+            font-style: italic;
+            color: var(--cream);
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+        .testimonial-author {
+            font-family: 'Cinzel', serif;
+            font-size: 0.72rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--gold-mid);
+        }
+        .stars { color: var(--gold-mid); font-size: 0.85rem; margin-bottom: 0.5rem; }
+
+        /* ===== CONTACT ===== */
+        .contact {
+            background:
+                radial-gradient(ellipse 60% 50% at 50% 100%, rgba(212,168,32,0.10) 0%, transparent 70%),
+                rgba(0,0,0,0.3);
+            text-align: center;
+        }
+        .contact-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 2.5rem;
+        }
+        .contact-item {
+            background: rgba(13,10,6,0.88);
+            border: 1px solid var(--gold-border);
+            padding: 1.5rem 2rem;
+            min-width: 200px;
+        }
+        .contact-label {
+            font-family: 'Cinzel', serif;
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--gold-mid);
+            display: block;
+            margin-bottom: 0.4rem;
+        }
+        .contact-value {
+            color: var(--cream);
+            font-size: 1rem;
+        }
+        .contact-value a {
+            color: var(--cream);
+            text-decoration: none;
+        }
+        .contact-value a:hover { color: var(--gold-light); }
+        .contact-tagline {
+            font-family: 'Great Vibes', cursive;
+            font-size: 1.8rem;
+            color: var(--gold-mid);
+            display: block;
+            margin-top: 2.5rem;
+        }
+
+        /* ===== SOCIAL MEDIA BUTTONS ===== */
+        .social-media {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 2.5rem;
+            flex-wrap: wrap;
+        }
+        .social-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            transition: all 0.3s ease;
+            border: 2px solid var(--gold-mid);
+            color: var(--gold-light);
+            text-decoration: none;
+            background: rgba(212, 168, 32, 0.1);
+            cursor: pointer;
+        }
+        .social-icon:hover {
+            background: var(--gold-mid);
+            color: var(--black-rich);
+            transform: scale(1.15) translateY(-3px);
+            box-shadow: 0 10px 20px rgba(212, 168, 32, 0.3);
+        }
+
+        /* ===== ADDRESS CHANGE INSTRUCTION ===== */
+        .address-instruction {
+            background: rgba(212, 168, 32, 0.08);
+            border: 1px solid var(--gold-border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            font-size: 0.9rem;
+            color: var(--cream-muted);
+            max-width: 650px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.8;
+        }
+        .address-instruction strong {
+            color: var(--gold-light);
+        }
+        .address-instruction code {
+            background: rgba(0,0,0,0.3);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: var(--nude-light);
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            text-align: center;
+            padding: 1.8rem 2rem;
+            border-top: 1px solid var(--gold-border);
+            font-family: 'Cinzel', serif;
+            font-size: 0.68rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--cream-muted);
+        }
+
+        /* ===== CONFIRMATION MODAL ===== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.82);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal-box {
+            background: #0d0a06;
+            border: 1px solid var(--gold-mid);
+            border-top: 3px solid var(--gold-light);
+            padding: 2.5rem;
+            max-width: 480px;
+            width: 90%;
+            text-align: center;
+        }
+        .modal-box h3 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            letter-spacing: 0.15em;
+            color: var(--gold-light);
+            margin-bottom: 0.8rem;
+        }
+        .modal-box p { font-size: 1rem; color: var(--cream); margin-bottom: 1.5rem; }
+        .modal-close {
+            font-family: 'Cinzel', serif;
+            font-size: 0.72rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            background: var(--gold-mid);
+            color: var(--black);
+            border: none;
+            padding: 0.8rem 2rem;
+            cursor: pointer;
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; transform: scale(0.5); }
+            50%       { opacity: 1; transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Sparkle canvas -->
+<canvas id="sparkle-canvas"></canvas>
+
+<!-- Navigation -->
+<nav class="navbar">
+    <div class="nav-container">
+        <div class="logo" style="display:flex;align-items:center;gap:8px">
+            <img src="assets/images/profile/Polish_20260606_173336419.png" alt="Profile" class="header-profile">
+            <h1>✦ Self-Love</h1>
+        </div>
+        <ul class="nav-menu">
+            <li><a href="#home" class="nav-link">Home</a></li>
+            <li><a href="#services" class="nav-link">Services</a></li>
+            <li><a href="#booking" class="nav-link">Book Now</a></li>
+            <li><a href="#testimonials" class="nav-link">Testimonials</a></li>
+            <li><a href="#contact" class="nav-link">Contact</a></li>
+        </ul>
+    </div>
+</nav>
+
+<!-- Hero -->
+<section id="home" class="hero">
+    <div class="hero-content">
+        <span class="hero-ornament">Welcome to</span>
+        <h2 class="hero-title-top">Self-Love</h2>
+        <span class="hero-title-script">Beauty Salon</span>
+        <div class="divider-ornament"><span>✦</span></div>
+        <p class="hero-tagline">Pamper Yourself with Our Premium Services</p>
+        <button class="cta-button" onclick="scrollToBooking()">Book Your Appointment</button>
+    </div>
+</section>
+
+<div class="gold-ribbon"></div>
+
+<!-- Services -->
+<section id="services" class="services">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-eyebrow">What We Offer</span>
+            <h2 class="section-title">Our Services</h2>
+            <div class="divider-ornament" style="max-width:400px;margin:1rem auto 0"><span>✦</span></div>
+        </div>
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-image">
+                    <img src="assets/images/hair-installation/537414ba14dd66e66a4b5612dcac8e36.0000000.jpg" alt="Hair Installation Service">
+                </div>
+                <h3>Hair Installation</h3>
+                <p>Premium hair installation services by expert hands</p>
+                <ul>
+                    <li class="single-price"><strong>R200</strong></li>
+                </ul>
+            </div>
+            <div class="service-card">
+                <div class="service-image">
+                    <img src="assets/images/nails/IMG-20260605-WA0019.jpg" alt="Nails Service">
+                </div>
+                <h3>Nails</h3>
+                <p>Beautiful nails using premium products &amp; techniques</p>
+                <ul>
+                    <li>Overlay Mani &amp; Pedi <strong>R250</strong></li>
+                    <li>Polygel Mani &amp; Gel Pedi <strong>R330</strong></li>
+                    <li>Acrylic Nails <strong>R180</strong></li>
+                </ul>
+            </div>
+            <div class="service-card">
+                <div class="service-image">
+                    <img src="assets/images/lashes/IMG-20260605-WA0018 (1).jpg" alt="Lashes Service">
+                </div>
+                <h3>Lashes</h3>
+                <p>Stunning extensions to enhance your natural beauty</p>
+                <ul>
+                    <li>Classic Lashes <strong>R400</strong></li>
+                    <li>Hybrid Lashes <strong>R400</strong></li>
+                </ul>
+            </div>
+            <div class="service-card">
+                <div class="service-image">
+                    <img src="assets/images/nails-cluster-lashes/537414ba14dd66e66a4b5612dcac8e36.0000000 (1).jpg" alt="Combo Package">
+                </div>
+                <h3>Combo Package</h3>
+                <p>Best value with our special monthly combo deals</p>
+                <ul>
+                    <li>Nails &amp; Cluster Lashes <strong>R300</strong></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="gold-ribbon"></div>
+
+<!-- Booking -->
+<section id="booking" class="booking">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-eyebrow">Reserve Your Spot</span>
+            <h2 class="section-title">Book Your Appointment</h2>
+            <div class="divider-ornament" style="max-width:400px;margin:1rem auto 0"><span>✦</span></div>
+        </div>
+        <div class="booking-form-container">
+            <form id="bookingForm" class="booking-form">
+                <div class="form-group">
+                    <label for="name">Full Name *</label>
+                    <input type="text" id="name" name="name" placeholder="Your full name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address *</label>
+                    <input type="email" id="email" name="email" placeholder="your@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number *</label>
+                    <input type="tel" id="phone" name="phone" placeholder="0XX XXX XXXX" required>
+                </div>
+                <div class="form-group">
+                    <label for="service">Select Service *</label>
+                    <select id="service" name="service" required>
+                        <option value="">Choose a service…</option>
+                        <option value="hair">Hair Installation — R200</option>
+                        <option value="overlay">Overlay Mani &amp; Pedi — R250</option>
+                        <option value="polygel">Polygel Mani &amp; Gel Pedi — R330</option>
+                        <option value="acrylic">Acrylic Nails — R180</option>
+                        <option value="nails-lashes">Nails &amp; Cluster Lashes — R300</option>
+                        <option value="classic-lashes">Classic Lashes — R400</option>
+                        <option value="hybrid-lashes">Hybrid Lashes — R400</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="date">Preferred Date *</label>
+                    <input type="date" id="date" name="date" required>
+                </div>
+                <div class="form-group">
+                    <label for="time">Preferred Time *</label>
+                    <select id="time" name="time" required>
+                        <option value="">Select a time slot…</option>
+                        <option value="09:00">9:00 AM</option>
+                        <option value="10:00">10:00 AM</option>
+                        <option value="11:00">11:00 AM</option>
+                        <option value="12:00">12:00 PM</option>
+                        <option value="13:00">1:00 PM</option>
+                        <option value="14:00">2:00 PM</option>
+                        <option value="15:00">3:00 PM</option>
+                        <option value="16:00">4:00 PM</option>
+                        <option value="17:00">5:00 PM</option>
+                        <option value="18:00">6:00 PM</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="notes">Special Requests</label>
+                    <textarea id="notes" name="notes" placeholder="Any special requests or notes…"></textarea>
+                </div>
+                <button type="submit" class="submit-button">Book Appointment</button>
+            </form>
+
+            <div id="availableSlots" class="available-slots">
+                <h3>Available Time Slots</h3>
+                <div id="slotsContainer" class="slots-container"></div>
+                <p id="slotNote" style="font-size:0.85rem;color:var(--text-dim);margin-top:1rem;font-style:italic;">
+                    Select a date above to see availability.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="gold-ribbon"></div>
+
+<!-- Testimonials -->
+<section id="testimonials" class="testimonials">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-eyebrow">Kind Words</span>
+            <h2 class="section-title">What Our Clients Say</h2>
+            <div class="divider-ornament" style="max-width:400px;margin:1rem auto 0"><span>✦</span></div>
+        </div>
+        <div id="testimonialsList" class="testimonials-grid">
+            <div class="testimonial-card">
+                <div class="stars">★★★★★</div>
+                <p class="testimonial-text">My nails have never looked this beautiful. The attention to detail is incredible — I get compliments every single day!</p>
+                <span class="testimonial-author">— Nomsa T.</span>
+            </div>
+            <div class="testimonial-card">
+                <div class="stars">★★★★★</div>
+                <p class="testimonial-text">The hybrid lashes are absolutely stunning. They look so natural and last for weeks. I won't go anywhere else!</p>
+                <span class="testimonial-author">— Ayanda M.</span>
+            </div>
+            <div class="testimonial-card">
+                <div class="stars">★★★★★</div>
+                <p class="testimonial-text">The combo deal is amazing value. Got my nails and cluster lashes done — felt like a whole new woman walking out!</p>
+                <span class="testimonial-author">— Lerato K.</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="gold-ribbon"></div>
+
+<!-- Contact -->
+<section id="contact" class="contact">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-eyebrow">We'd Love to Hear From You</span>
+            <h2 class="section-title">Get In Touch</h2>
+            <div class="divider-ornament" style="max-width:400px;margin:1rem auto 0"><span>✦</span></div>
+        </div>
+        <div class="contact-grid">
+            <div class="contact-item">
+                <span class="contact-label">📍 Location</span>
+                <span class="contact-value">13 Cedar Rd, Overbaakens, Fairview, Port Elizabeth</span>
+            </div>
+            <div class="contact-item">
+                <span class="contact-label">📞 Phone</span>
+                <span class="contact-value"><a href="tel:0680859948">068 085 9948</a></span>
+            </div>
+            <div class="contact-item">
+                <span class="contact-label">📧 Email</span>
+                <span class="contact-value"><a href="mailto:selflovequalpro@gmail.com">selflovequalpro@gmail.com</a></span>
+            </div>
+            <div class="contact-item">
+                <span class="contact-label">💰 Payment</span>
+                <span class="contact-value">Capitec — 2547284738</span>
+            </div>
+        </div>
+        <span class="contact-tagline">Invest in yourself, it's worth it</span>
+        
+        <!-- Social Media Buttons -->
+        <div class="social-media">
+            <a href="https://instagram.com/yourprofile" class="social-icon" title="Follow on Instagram" target="_blank">📷</a>
+            <a href="https://tiktok.com/@yourprofile" class="social-icon" title="Follow on TikTok" target="_blank">🎵</a>
+            <a href="https://facebook.com/yourpage" class="social-icon" title="Like on Facebook" target="_blank">👍</a>
+            <a href="https://wa.me/27680859948" class="social-icon" title="Message on WhatsApp" target="_blank">💬</a>
+            <a href="https://youtube.com/@yourchanne" class="social-icon" title="Subscribe on YouTube" target="_blank">🎬</a>
+        </div>
+
+        <!-- How to Change Address -->
+        <div class="address-instruction">
+            <strong>📝 How to Change Your Address:</strong><br>
+            To update your location, edit the <code>&lt;section id="contact"&gt;</code> in the HTML. Find the line with "📍 Location" and replace the text with your new address. For social media links, paste your profile URLs in the <code>href</code> attributes in the social media buttons above (Instagram, TikTok, Facebook, WhatsApp, YouTube links).
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="gold-ribbon" style="margin-bottom:1.2rem"></div>
+    <p>&copy; 2025 Self-Love Beauty Salon &nbsp;✦&nbsp; All Rights Reserved</p>
+</footer>
+
+<!-- Confirmation Modal -->
+<div class="modal-overlay" id="confirmModal">
+    <div class="modal-box">
+        <h3>✦ Booking Received ✦</h3>
+        <p id="confirmText">Thank you! We'll be in touch shortly to confirm your appointment.</p>
+        <button class="modal-close" onclick="closeModal()">Close</button>
+    </div>
+</div>
+
+<script>
+/* ===== SPARKLE BACKGROUND ===== */
+(function(){
+    const canvas = document.getElementById('sparkle-canvas');
+    const ctx = canvas.getContext('2d');
+    let W, H, particles = [];
+
+    function resize(){
+        W = canvas.width  = window.innerWidth;
+        H = canvas.height = document.body.scrollHeight;
+    }
+
+    function rand(min, max){ return Math.random()*(max-min)+min; }
+
+    function createParticles(){
+        particles = [];
+        const count = Math.floor((W*H)/14000);
+        const colors = ['#f7e08a','#d4a820','#b8891a','#ffffff','#e85ca0','#f4a8d0'];
+        for(let i=0;i<count;i++){
+            particles.push({
+                x: rand(0, W),
+                y: rand(0, H),
+                r: rand(0.5, 2.5),
+                alpha: rand(0.1, 0.9),
+                speed: rand(0.003, 0.012),
+                phase: rand(0, Math.PI*2),
+                color: colors[Math.floor(Math.random()*colors.length)]
+            });
+        }
+    }
+
+    let frame = 0;
+    function draw(){
+        ctx.clearRect(0, 0, W, H);
+        frame += 0.015;
+        particles.forEach(p => {
+            const a = (Math.sin(frame * p.speed * 80 + p.phase) * 0.5 + 0.5) * p.alpha;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+            ctx.fillStyle = p.color;
+            ctx.globalAlpha = a;
+            ctx.fill();
+        });
+        ctx.globalAlpha = 1;
+        requestAnimationFrame(draw);
+    }
+
+    resize();
+    createParticles();
+    draw();
+    window.addEventListener('resize', ()=>{ resize(); createParticles(); });
+})();
+
+/* ===== SCROLL HELPER ===== */
+function scrollToBooking(){
+    document.getElementById('booking').scrollIntoView({behavior:'smooth'});
+}
+
+/* ===== DATE → SLOT GENERATOR ===== */
+const allSlots = ['9:00 AM','10:00 AM','11:00 AM','12:00 PM','1:00 PM','2:00 PM','3:00 PM','4:00 PM','5:00 PM','6:00 PM'];
+const bookedMap = {};
+
+document.getElementById('date').addEventListener('change', function(){
+    const d = this.value;
+    if(!d) return;
+    
+    // For local testing, use random slots. In production with GitHub Pages, this will fetch real bookings
+    if(!bookedMap[d]){
+        const n = Math.floor(Math.random()*2);
+        const shuffled = [...allSlots].sort(()=>Math.random()-0.5);
+        bookedMap[d] = shuffled.slice(0,n);
+    }
+    renderSlots(d);
+    document.getElementById('slotNote').style.display = 'none';
+});
+
+function renderSlots(date){
+    const container = document.getElementById('slotsContainer');
+    container.innerHTML = '';
+    allSlots.forEach(s => {
+        const pill = document.createElement('div');
+        pill.className = 'slot-pill' + (bookedMap[date].includes(s) ? ' booked' : '');
+        pill.textContent = s;
+        pill.addEventListener('click', function(){
+            document.querySelectorAll('.slot-pill').forEach(p=>p.classList.remove('selected'));
+            this.classList.add('selected');
+            // FIXED: Convert slot text (e.g., "9:00 AM") to dropdown value (e.g., "09:00")
+            const slotValue = convertSlotToTime(s);
+            document.getElementById('time').value = slotValue;
+        });
+        container.appendChild(pill);
+    });
+}
+
+// Convert slot display text (e.g., "2:00 PM") to 24-hour format (e.g., "14:00")
+function convertSlotToTime(slotText) {
+    const hour = parseInt(slotText);
+    const isPM = slotText.includes('PM');
+    const isAM = slotText.includes('AM');
+    let hour24 = hour;
+    
+    if(isPM && hour !== 12) hour24 = hour + 12;
+    else if(isAM && hour === 12) hour24 = 0;
+    
+    return String(hour24).padStart(2, '0') + ':00';
+}
+
+/* ===== BOOKING FORM ===== */
+function handleBooking(e){
+    e.preventDefault();
+    const name    = document.getElementById('name').value;
+    const email   = document.getElementById('email').value;
+    const phone   = document.getElementById('phone').value;
+    const service = document.getElementById('service').value;
+    const svc     = document.getElementById('service').options[document.getElementById('service').selectedIndex].text;
+    const date    = document.getElementById('date').value;
+    const time    = document.getElementById('time').value;
+    const notes   = document.getElementById('notes').value;
+    
+    // Validate all required fields
+    if(!name || !email || !phone || !service || !date || !time){
+        alert('Please fill in all required fields.');
+        return;
+    }
+    
+    console.log('📝 Booking submitted:', { name, email, service, date, time });
+    
+    // Show confirmation immediately
+    const timeText = document.getElementById('time').options[document.getElementById('time').selectedIndex].text;
+    document.getElementById('confirmText').innerHTML =
+        `Thank you, <strong style="color:var(--gold-light)">${name}</strong>!<br>
+         Your <em>${svc}</em> appointment on <strong>${date}</strong> at <strong>${timeText}</strong> has been received.<br><br>
+         We'll WhatsApp you on <a href="https://wa.me/27680859948" style="color:var(--gold-light)">068 085 9948</a> to confirm.`;
+    document.getElementById('confirmModal').classList.add('active');
+    document.getElementById('bookingForm').reset();
+    document.getElementById('slotsContainer').innerHTML = '';
+    document.getElementById('slotNote').style.display = '';
+    
+    // Save booking locally first (always works)
+    saveBookingLocally({ name, email, phone, service, date, time, notes });
+    
+    // Send to backend asynchronously (non-blocking)
+    const booking = { name, email, phone, service, date, time, notes };
+    sendBookingToBackend(booking);
+}
+
+// Send booking to backend via secure channel
+// NOTE: Replace /api/bookings with your actual backend URL
+function sendBookingToBackend(booking) {
+    // TODO: Update this URL to your backend endpoint
+    const BACKEND_ENDPOINT = 'https://script.google.com/macros/s/AKfycbzU2jTawoh5NQVvXRxs63NlB2NvrnQeQebq0n8AP_pE6bGIM6ZuWn1VZulDQ4j6rWo6/exec';
+    
+    fetch(BACKEND_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(booking)
+    })
+    .then(response => {
+        if(!response.ok) throw new Error('Backend error: ' + response.status);
+        return response.json();
+    })
+    .then(data => {
+        console.log('✅ Booking sent to backend:', data);
+    })
+    .catch(err => {
+        console.warn('⚠️ Backend submission failed (booking saved locally):', err);
+    });
+}
+
+// Save booking to local storage as backup
+function saveBookingLocally(booking) {
+    try {
+        let bookings = JSON.parse(localStorage.getItem('self_love_bookings')) || [];
+        booking.id = Date.now();
+        booking.savedAt = new Date().toISOString();
+        bookings.push(booking);
+        localStorage.setItem('self_love_bookings', JSON.stringify(bookings));
+        console.log('✅ Booking saved locally (ID: ' + booking.id + ')');
+    } catch(err) {
+        console.error('❌ Could not save booking locally:', err);
+    }
+}
+
+function closeModal(){
+    document.getElementById('confirmModal').classList.remove('active');
+}
+
+/* ===== NAV ACTIVE ===== */
+const sections = document.querySelectorAll('section[id]');
+const links    = document.querySelectorAll('.nav-link');
+window.addEventListener('scroll', ()=>{
+    const y = window.scrollY + 100;
+    sections.forEach(s=>{
+        if(y >= s.offsetTop && y < s.offsetTop + s.offsetHeight){
+            links.forEach(l=>{ l.style.color = l.getAttribute('href')==='#'+s.id ? 'var(--gold-light)' : ''; });
+        }
+    });
+});
+
+/* ===== SET MIN DATE TO TODAY ===== */
+document.getElementById('date').min = new Date().toISOString().split('T')[0];
+
+/* ===== ATTACH FORM SUBMISSION HANDLER ===== */
+document.getElementById('bookingForm').addEventListener('submit', handleBooking);
+</script>
+</body>
+</html>
