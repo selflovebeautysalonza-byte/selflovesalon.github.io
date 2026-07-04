@@ -379,6 +379,84 @@
         }
         .form-group select option { background: #0d0a06; }
         .form-group textarea { min-height: 90px; resize: vertical; }
+
+        /* ===== CUSTOM DATE PICKER ===== */
+        .date-picker { position: relative; }
+        .date-picker-input { cursor: pointer; }
+        .calendar-popup {
+            display: none;
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0;
+            z-index: 50;
+            width: 280px;
+            max-width: 90vw;
+            background: var(--black-rich);
+            border: 1px solid var(--gold-border);
+            box-shadow: 0 14px 34px rgba(0,0,0,0.55);
+            padding: 1rem;
+        }
+        .calendar-popup.open { display: block; }
+        .calendar-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.9rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.8rem;
+            letter-spacing: 0.08em;
+            color: var(--gold-light);
+        }
+        .calendar-nav button {
+            background: none;
+            border: 1px solid var(--gold-border);
+            color: var(--gold-mid);
+            width: 26px;
+            height: 26px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            line-height: 1;
+            transition: background 0.2s, color 0.2s;
+        }
+        .calendar-nav button:hover:not(:disabled) { background: var(--gold-mid); color: var(--black); }
+        .calendar-nav button:disabled { opacity: 0.25; cursor: not-allowed; }
+        .calendar-weekdays, .calendar-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+            text-align: center;
+        }
+        .calendar-weekdays span {
+            font-family: 'Cinzel', serif;
+            font-size: 0.6rem;
+            letter-spacing: 0.05em;
+            color: var(--cream-muted);
+            padding-bottom: 0.4rem;
+        }
+        .calendar-day {
+            padding: 0.5rem 0;
+            font-size: 0.85rem;
+            color: var(--cream);
+            cursor: pointer;
+            border-radius: 3px;
+            transition: background 0.2s, color 0.2s;
+        }
+        .calendar-day:hover { background: rgba(212,168,32,0.2); }
+        .calendar-day.selected { background: var(--gold-mid); color: var(--black); font-weight: 600; }
+        .calendar-day.today { border: 1px solid var(--gold-mid); }
+        .calendar-day.disabled {
+            opacity: 0.25;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+        .calendar-day.empty { visibility: hidden; pointer-events: none; }
+        .selected-time-label {
+            font-size: 0.85rem;
+            color: var(--gold-light);
+            margin-top: 0.9rem;
+            display: block;
+            min-height: 1.2em;
+        }
         .submit-button {
             width: 100%;
             font-family: 'Cinzel', serif;
@@ -538,7 +616,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.6rem;
             transition: all 0.3s ease;
             border: 2px solid var(--gold-mid);
             color: var(--gold-light);
@@ -546,36 +623,16 @@
             background: rgba(212, 168, 32, 0.1);
             cursor: pointer;
         }
+        .social-icon svg {
+            width: 22px;
+            height: 22px;
+            fill: currentColor;
+        }
         .social-icon:hover {
             background: var(--gold-mid);
             color: var(--black-rich);
             transform: scale(1.15) translateY(-3px);
             box-shadow: 0 10px 20px rgba(212, 168, 32, 0.3);
-        }
-
-        /* ===== ADDRESS CHANGE INSTRUCTION ===== */
-        .address-instruction {
-            background: rgba(212, 168, 32, 0.08);
-            border: 1px solid var(--gold-border);
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin-top: 2rem;
-            font-size: 0.9rem;
-            color: var(--cream-muted);
-            max-width: 650px;
-            margin-left: auto;
-            margin-right: auto;
-            line-height: 1.8;
-        }
-        .address-instruction strong {
-            color: var(--gold-light);
-        }
-        .address-instruction code {
-            background: rgba(0,0,0,0.3);
-            padding: 2px 6px;
-            border-radius: 3px;
-            font-family: 'Courier New', monospace;
-            color: var(--nude-light);
         }
 
         /* ===== FOOTER ===== */
@@ -779,24 +836,22 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="date">Preferred Date *</label>
-                    <input type="date" id="date" name="date" required>
-                </div>
-                <div class="form-group">
-                    <label for="time">Preferred Time *</label>
-                    <select id="time" name="time" required>
-                        <option value="">Select a time slot…</option>
-                        <option value="09:00">9:00 AM</option>
-                        <option value="10:00">10:00 AM</option>
-                        <option value="11:00">11:00 AM</option>
-                        <option value="12:00">12:00 PM</option>
-                        <option value="13:00">1:00 PM</option>
-                        <option value="14:00">2:00 PM</option>
-                        <option value="15:00">3:00 PM</option>
-                        <option value="16:00">4:00 PM</option>
-                        <option value="17:00">5:00 PM</option>
-                        <option value="18:00">6:00 PM</option>
-                    </select>
+                    <label for="dateInput">Preferred Date *</label>
+                    <div class="date-picker">
+                        <input type="text" id="dateInput" class="date-picker-input" placeholder="Select a date" readonly required autocomplete="off">
+                        <input type="hidden" id="date" name="date">
+                        <div class="calendar-popup" id="calendarPopup">
+                            <div class="calendar-nav">
+                                <button type="button" id="calPrev" aria-label="Previous month">&#10094;</button>
+                                <span id="calLabel"></span>
+                                <button type="button" id="calNext" aria-label="Next month">&#10095;</button>
+                            </div>
+                            <div class="calendar-weekdays">
+                                <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
+                            </div>
+                            <div class="calendar-days" id="calDays"></div>
+                        </div>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="notes">Special Requests</label>
@@ -807,10 +862,12 @@
 
             <div id="availableSlots" class="available-slots">
                 <h3>Available Time Slots</h3>
+                <input type="hidden" id="time" name="time" required>
                 <div id="slotsContainer" class="slots-container"></div>
                 <p id="slotNote" style="font-size:0.85rem;color:var(--text-dim);margin-top:1rem;font-style:italic;">
                     Select a date above to see availability.
                 </p>
+                <span class="selected-time-label" id="selectedTimeLabel"></span>
             </div>
         </div>
     </div>
@@ -878,17 +935,21 @@
         
         <!-- Social Media Buttons -->
         <div class="social-media">
-            <a href="https://instagram.com/yourprofile" class="social-icon" title="Follow on Instagram" target="_blank">📷</a>
-            <a href="https://tiktok.com/@yourprofile" class="social-icon" title="Follow on TikTok" target="_blank">🎵</a>
-            <a href="https://facebook.com/yourpage" class="social-icon" title="Like on Facebook" target="_blank">👍</a>
-            <a href="https://wa.me/27680859948" class="social-icon" title="Message on WhatsApp" target="_blank">💬</a>
-            <a href="https://youtube.com/@yourchanne" class="social-icon" title="Subscribe on YouTube" target="_blank">🎬</a>
-        </div>
-
-        <!-- How to Change Address -->
-        <div class="address-instruction">
-            <strong>📝 How to Change Your Address:</strong><br>
-            To update your location, edit the <code>&lt;section id="contact"&gt;</code> in the HTML. Find the line with "📍 Location" and replace the text with your new address. For social media links, paste your profile URLs in the <code>href</code> attributes in the social media buttons above (Instagram, TikTok, Facebook, WhatsApp, YouTube links).
+            <a href="https://instagram.com/yourprofile" class="social-icon" title="Follow on Instagram" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.2c3.2 0 3.58.01 4.85.07 1.17.05 1.97.24 2.43.4a4.9 4.9 0 0 1 1.77 1.15 4.9 4.9 0 0 1 1.15 1.77c.16.46.35 1.26.4 2.43.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.24 1.97-.4 2.43a4.9 4.9 0 0 1-1.15 1.77 4.9 4.9 0 0 1-1.77 1.15c-.46.16-1.26.35-2.43.4-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.97-.24-2.43-.4a4.9 4.9 0 0 1-1.77-1.15 4.9 4.9 0 0 1-1.15-1.77c-.16-.46-.35-1.26-.4-2.43C2.21 15.58 2.2 15.2 2.2 12s.01-3.58.07-4.85c.05-1.17.24-1.97.4-2.43a4.9 4.9 0 0 1 1.15-1.77A4.9 4.9 0 0 1 5.59 1.8c.46-.16 1.26-.35 2.43-.4C9.29 1.34 9.67 1.33 12 1.33Zm0 1.98c-3.15 0-3.5.01-4.73.07-.96.04-1.48.2-1.82.34-.46.18-.79.39-1.13.73-.34.34-.55.67-.73 1.13-.14.34-.3.86-.34 1.82-.06 1.23-.07 1.58-.07 4.73s.01 3.5.07 4.73c.04.96.2 1.48.34 1.82.18.46.39.79.73 1.13.34.34.67.55 1.13.73.34.14.86.3 1.82.34 1.23.06 1.58.07 4.73.07s3.5-.01 4.73-.07c.96-.04 1.48-.2 1.82-.34.46-.18.79-.39 1.13-.73.34-.34.55-.67.73-1.13.14-.34.3-.86.34-1.82.06-1.23.07-1.58.07-4.73s-.01-3.5-.07-4.73c-.04-.96-.2-1.48-.34-1.82a3 3 0 0 0-.73-1.13 3 3 0 0 0-1.13-.73c-.34-.14-.86-.3-1.82-.34-1.23-.06-1.58-.07-4.73-.07Zm0 3.37a5.45 5.45 0 1 1 0 10.9 5.45 5.45 0 0 1 0-10.9Zm0 1.98a3.47 3.47 0 1 0 0 6.94 3.47 3.47 0 0 0 0-6.94Zm5.66-1.6a1.27 1.27 0 1 1 0 2.55 1.27 1.27 0 0 1 0-2.54Z"/></svg>
+            </a>
+            <a href="https://tiktok.com/@yourprofile" class="social-icon" title="Follow on TikTok" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.6 1.5h-3.3v14.3a3.1 3.1 0 1 1-2.2-2.97V9.9a6.2 6.2 0 1 0 5.5 6.15V9.15a8.1 8.1 0 0 0 4.8 1.55V7.4a4.8 4.8 0 0 1-4.8-4.8V1.5Z"/></svg>
+            </a>
+            <a href="https://facebook.com/yourpage" class="social-icon" title="Like on Facebook" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 22v-8.4h2.8l.4-3.3h-3.2V8.1c0-.95.27-1.6 1.63-1.6h1.74V3.56A23.4 23.4 0 0 0 15.35 3.4c-2.51 0-4.23 1.53-4.23 4.35v2.55H8.3v3.3h2.82V22h3.38Z"/></svg>
+            </a>
+            <a href="https://wa.me/27680859948" class="social-icon" title="Message on WhatsApp" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.03 2.5a9.5 9.5 0 0 0-8.2 14.3L2.5 21.5l4.83-1.27a9.5 9.5 0 1 0 4.7-17.73Zm0 1.98a7.52 7.52 0 1 1 0 15.04 7.47 7.47 0 0 1-3.83-1.05l-.28-.16-2.87.75.77-2.8-.18-.29a7.52 7.52 0 0 1 6.39-11.49Zm-3.6 4.05c-.2 0-.5.07-.77.37-.26.3-1 .98-1 2.4 0 1.4 1.03 2.77 1.17 2.96.14.19 2 3.2 4.94 4.36 2.44.97 2.94.78 3.47.73.53-.05 1.7-.7 1.94-1.36.24-.67.24-1.24.17-1.36-.07-.12-.26-.19-.53-.33-.27-.14-1.7-.84-1.96-.93-.26-.1-.46-.14-.65.14-.19.28-.75.93-.92 1.12-.17.19-.34.21-.61.07-.27-.14-1.15-.42-2.19-1.34-.81-.72-1.36-1.61-1.52-1.88-.16-.28-.02-.43.12-.57.13-.13.28-.33.42-.5.14-.16.19-.28.28-.47.1-.19.05-.35-.02-.5-.07-.14-.65-1.6-.9-2.18-.24-.57-.48-.49-.65-.5-.17-.01-.36-.01-.56-.01Z"/></svg>
+            </a>
+            <a href="https://youtube.com/@yourchanne" class="social-icon" title="Subscribe on YouTube" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22.5 7.7a2.9 2.9 0 0 0-2.05-2.06C18.63 5.2 12 5.2 12 5.2s-6.63 0-8.45.44A2.9 2.9 0 0 0 1.5 7.7 30 30 0 0 0 1.05 13a30 30 0 0 0 .45 5.3 2.9 2.9 0 0 0 2.05 2.06c1.82.44 8.45.44 8.45.44s6.63 0 8.45-.44a2.9 2.9 0 0 0 2.05-2.06 30 30 0 0 0 .45-5.3 30 30 0 0 0-.45-5.3ZM9.75 16.4V9.6L15.8 13l-6.05 3.4Z"/></svg>
+            </a>
         </div>
     </div>
 </section>
@@ -966,6 +1027,96 @@ function scrollToBooking(){
     document.getElementById('booking').scrollIntoView({behavior:'smooth'});
 }
 
+/* ===== CUSTOM DATE PICKER (blocks past dates entirely) ===== */
+(function(){
+    const dateInput  = document.getElementById('dateInput');
+    const hiddenDate = document.getElementById('date');
+    const popup      = document.getElementById('calendarPopup');
+    const calLabel   = document.getElementById('calLabel');
+    const calDays    = document.getElementById('calDays');
+    const prevBtn    = document.getElementById('calPrev');
+    const nextBtn    = document.getElementById('calNext');
+
+    const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+    const today = new Date();
+    today.setHours(0,0,0,0);
+
+    let viewYear  = today.getFullYear();
+    let viewMonth = today.getMonth();
+    let selectedDate = null;
+
+    function formatDisplay(d){
+        return `${d.getDate()} ${monthNames[d.getMonth()]} ${d.getFullYear()}`;
+    }
+    function formatISO(d){
+        return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    }
+
+    function render(){
+        calLabel.textContent = `${monthNames[viewMonth]} ${viewYear}`;
+        calDays.innerHTML = '';
+
+        const firstDay     = new Date(viewYear, viewMonth, 1).getDay();
+        const daysInMonth  = new Date(viewYear, viewMonth + 1, 0).getDate();
+
+        for(let i = 0; i < firstDay; i++){
+            const empty = document.createElement('span');
+            empty.className = 'calendar-day empty';
+            calDays.appendChild(empty);
+        }
+
+        for(let day = 1; day <= daysInMonth; day++){
+            const cellDate = new Date(viewYear, viewMonth, day);
+            const cell = document.createElement('span');
+            cell.className = 'calendar-day';
+            cell.textContent = day;
+
+            if(cellDate < today){
+                // Past dates are disabled — cannot be clicked or selected at all
+                cell.classList.add('disabled');
+            } else {
+                cell.addEventListener('click', () => {
+                    selectedDate = cellDate;
+                    hiddenDate.value = formatISO(cellDate);
+                    dateInput.value = formatDisplay(cellDate);
+                    popup.classList.remove('open');
+                    hiddenDate.dispatchEvent(new Event('change'));
+                });
+            }
+            if(cellDate.getTime() === today.getTime()) cell.classList.add('today');
+            if(selectedDate && cellDate.getTime() === selectedDate.getTime()) cell.classList.add('selected');
+
+            calDays.appendChild(cell);
+        }
+
+        // Don't allow navigating to months before the current one
+        prevBtn.disabled = (viewYear === today.getFullYear() && viewMonth === today.getMonth());
+    }
+
+    dateInput.addEventListener('click', (e) => {
+        e.stopPropagation();
+        popup.classList.toggle('open');
+    });
+    document.addEventListener('click', (e) => {
+        if(!popup.contains(e.target) && e.target !== dateInput){
+            popup.classList.remove('open');
+        }
+    });
+    prevBtn.addEventListener('click', () => {
+        viewMonth--;
+        if(viewMonth < 0){ viewMonth = 11; viewYear--; }
+        render();
+    });
+    nextBtn.addEventListener('click', () => {
+        viewMonth++;
+        if(viewMonth > 11){ viewMonth = 0; viewYear++; }
+        render();
+    });
+
+    render();
+})();
+
 /* ===== DATE → SLOT GENERATOR ===== */
 const allSlots = ['9:00 AM','10:00 AM','11:00 AM','12:00 PM','1:00 PM','2:00 PM','3:00 PM','4:00 PM','5:00 PM','6:00 PM'];
 const bookedMap = {};
@@ -982,6 +1133,8 @@ document.getElementById('date').addEventListener('change', function(){
     }
     renderSlots(d);
     document.getElementById('slotNote').style.display = 'none';
+    document.getElementById('selectedTimeLabel').textContent = '';
+    document.getElementById('time').value = '';
 });
 
 function renderSlots(date){
@@ -994,9 +1147,10 @@ function renderSlots(date){
         pill.addEventListener('click', function(){
             document.querySelectorAll('.slot-pill').forEach(p=>p.classList.remove('selected'));
             this.classList.add('selected');
-            // FIXED: Convert slot text (e.g., "9:00 AM") to dropdown value (e.g., "09:00")
-            const slotValue = convertSlotToTime(s);
-            document.getElementById('time').value = slotValue;
+            const timeInput = document.getElementById('time');
+            timeInput.value = convertSlotToTime(s);
+            timeInput.dataset.label = s;
+            document.getElementById('selectedTimeLabel').textContent = 'Selected time: ' + s;
         });
         container.appendChild(pill);
     });
@@ -1032,37 +1186,59 @@ function handleBooking(e){
         alert('Please fill in all required fields.');
         return;
     }
+
+    // Defensive check: never allow a past date through, even if the field was tampered with
+    const todayISO = new Date().toISOString().split('T')[0];
+    if(date < todayISO){
+        alert('Please select a valid date (today or later).');
+        return;
+    }
     
     console.log('📝 Booking submitted:', { name, email, service, date, time });
-    
-    // Show confirmation immediately
-    const timeText = document.getElementById('time').options[document.getElementById('time').selectedIndex].text;
-    document.getElementById('confirmText').innerHTML =
-        `Thank you, <strong style="color:var(--gold-light)">${name}</strong>!<br>
-         Your <em>${svc}</em> appointment on <strong>${date}</strong> at <strong>${timeText}</strong> has been received.<br><br>
-         We'll WhatsApp you on <a href="https://wa.me/27680859948" style="color:var(--gold-light)">068 085 9948</a> to confirm.`;
-    document.getElementById('confirmModal').classList.add('active');
-    document.getElementById('bookingForm').reset();
-    document.getElementById('slotsContainer').innerHTML = '';
-    document.getElementById('slotNote').style.display = '';
-    
-    // Save booking locally first (always works)
-    saveBookingLocally({ name, email, phone, service, date, time, notes });
-    
-    // Send to backend asynchronously (non-blocking)
+
+    const timeText = document.getElementById('time').dataset.label || time;
+    const submitBtn = document.querySelector('#bookingForm .submit-button');
+    const originalBtnText = submitBtn.textContent;
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending…';
+
+    // Always keep a local backup copy
     const booking = { name, email, phone, service, date, time, notes };
-    sendBookingToBackend(booking);
+    saveBookingLocally(booking);
+
+    // Send to backend and WAIT for the result before telling the user it worked
+    sendBookingToBackend(booking)
+        .then(() => {
+            document.getElementById('confirmText').innerHTML =
+                `Thank you, <strong style="color:var(--gold-light)">${name}</strong>!<br>
+                 Your <em>${svc}</em> appointment on <strong>${date}</strong> at <strong>${timeText}</strong> has been received.<br><br>
+                 We'll WhatsApp you on <a href="https://wa.me/27680859948" style="color:var(--gold-light)">068 085 9948</a> to confirm.`;
+            document.getElementById('confirmModal').classList.add('active');
+            document.getElementById('bookingForm').reset();
+            document.getElementById('slotsContainer').innerHTML = '';
+            document.getElementById('slotNote').style.display = '';
+        })
+        .catch(err => {
+            console.warn('⚠️ Backend submission failed:', err);
+            alert('Sorry, we could not reach the booking system. Please try again, or WhatsApp us directly on 068 085 9948 to book.');
+        })
+        .finally(() => {
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalBtnText;
+        });
 }
 
-// Send booking to backend via secure channel
-// NOTE: Replace /api/bookings with your actual backend URL
+// Send booking to the Google Apps Script backend (writes to Sheets + Calendar)
 function sendBookingToBackend(booking) {
-    // TODO: Update this URL to your backend endpoint
     const BACKEND_ENDPOINT = 'https://script.google.com/macros/s/AKfycbzU2jTawoh5NQVvXRxs63NlB2NvrnQeQebq0n8AP_pE6bGIM6ZuWn1VZulDQ4j6rWo6/exec';
-    
-    fetch(BACKEND_ENDPOINT, {
+
+    // IMPORTANT: Apps Script web apps don't handle CORS preflight requests.
+    // Sending 'text/plain' avoids the browser firing a preflight OPTIONS request
+    // (which Apps Script ignores, causing the fetch to fail silently).
+    // The Apps Script code parses the raw body as JSON regardless of this header.
+    return fetch(BACKEND_ENDPOINT, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify(booking)
     })
     .then(response => {
@@ -1070,10 +1246,9 @@ function sendBookingToBackend(booking) {
         return response.json();
     })
     .then(data => {
+        if (!data || data.result !== 'success') throw new Error('Backend did not confirm success: ' + JSON.stringify(data));
         console.log('✅ Booking sent to backend:', data);
-    })
-    .catch(err => {
-        console.warn('⚠️ Backend submission failed (booking saved locally):', err);
+        return data;
     });
 }
 
@@ -1107,8 +1282,6 @@ window.addEventListener('scroll', ()=>{
     });
 });
 
-/* ===== SET MIN DATE TO TODAY ===== */
-document.getElementById('date').min = new Date().toISOString().split('T')[0];
 
 /* ===== ATTACH FORM SUBMISSION HANDLER ===== */
 document.getElementById('bookingForm').addEventListener('submit', handleBooking);
